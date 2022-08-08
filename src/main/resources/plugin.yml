@@ -1,0 +1,4 @@
+name: Hunt-or-be-hunted
+version: '${project.version}'
+main: com.ja90n.huntorbehunted.HuntOrBeHunted
+api-version: 1.19
