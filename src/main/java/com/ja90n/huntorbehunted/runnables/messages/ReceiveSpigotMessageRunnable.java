@@ -27,7 +27,6 @@ public class ReceiveSpigotMessageRunnable extends BukkitRunnable {
         try (Jedis jedis = pool.getResource()) {
             if (!jedis.get("spigot:removeplayer:" + huntOrBeHunted.getArena().getName()).equals("")) {
                 Player player = Bukkit.getPlayer(UUID.fromString(jedis.get("spigot:removeplayer:" + huntOrBeHunted.getArena().getName())));
-                jedis.set("spigot:removeplayer:" + huntOrBeHunted.getArena().getName(),"");
                 huntOrBeHunted.getArena().removePlayer(player);
                 if (huntOrBeHunted.getArena().getGameState() == GameState.COUNTDOWN && huntOrBeHunted.getArena().getPlayers().size() < huntOrBeHunted.getConfigManager().getRequiredPlayers()){
                     huntOrBeHunted.getArena().sendMessage(ChatColor.RED + "There are not enough players, countdown stopped!");
@@ -39,6 +38,7 @@ public class ReceiveSpigotMessageRunnable extends BukkitRunnable {
                     huntOrBeHunted.getArena().sendMessage(ChatColor.RED + "The game has ended as to many players have left.");
                     huntOrBeHunted.getArena().stopGame();
                 }
+                jedis.set("spigot:removeplayer:" + huntOrBeHunted.getArena().getName(),"");
             }
         }
     }

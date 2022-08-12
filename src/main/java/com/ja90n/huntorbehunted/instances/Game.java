@@ -2,6 +2,7 @@ package com.ja90n.huntorbehunted.instances;
 
 import com.ja90n.huntorbehunted.HuntOrBeHunted;
 import com.ja90n.huntorbehunted.GameState;
+import com.ja90n.huntorbehunted.runnables.PowerUpSpawnRunnable;
 import com.ja90n.huntorbehunted.runnables.RunnerWinCountdownRunnable;
 import com.ja90n.huntorbehunted.runnables.SeekerStartCountdownRunnable;
 import com.ja90n.huntorbehunted.utils.SetScoreboard;
@@ -9,9 +10,11 @@ import com.ja90n.huntorbehunted.utils.SetupPlayerUtil;
 import com.ja90n.huntorbehunted.utils.UnfreezeRunnable;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,11 +30,14 @@ public class Game {
     private RunnerWinCountdownRunnable runnerWinCountdownRunnable;
     private List<Location> spawnLocations;
     private List<Location> hiderSpawnLocations;
+    private PowerUpSpawnRunnable powerUpSpawnRunnable;
+    private HashMap<Cuboid,ArmorStand> powerUps;
 
     public Game(HuntOrBeHunted huntOrBeHunted, Arena arena){
         this.huntOrBeHunted = huntOrBeHunted;
         this.arena = arena;
         this.runnerWinCountdownRunnable = new RunnerWinCountdownRunnable(huntOrBeHunted,arena);
+        powerUps = new HashMap<>();
         seekerCountdown = new ArrayList<>();
         teams = new HashMap<>();
         spawnLocations = new ArrayList<>();
@@ -78,6 +84,7 @@ public class Game {
         runnerWinCountdownRunnable.start();
         hiderSpawnLocations = spawnLocations;
         arena.setGameState(GameState.LIVE);
+        powerUpSpawnRunnable = new PowerUpSpawnRunnable(huntOrBeHunted);
 
         for (UUID uuid : arena.getPlayers()){
             new SetScoreboard(Bukkit.getPlayer(uuid), huntOrBeHunted);
@@ -154,5 +161,17 @@ public class Game {
     public void ResetRunnerWinCountdownRunnable(){
         runnerWinCountdownRunnable.cancel();
         runnerWinCountdownRunnable = new RunnerWinCountdownRunnable(huntOrBeHunted,arena);
+    }
+
+    public HashMap<Cuboid,ArmorStand> getPowerUps() {
+        return powerUps;
+    }
+
+    public List<Location> getSpawnLocations() {
+        return spawnLocations;
+    }
+
+    public PowerUpSpawnRunnable getPowerUpSpawnRunnable() {
+        return powerUpSpawnRunnable;
     }
 }

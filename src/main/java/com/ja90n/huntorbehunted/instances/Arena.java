@@ -6,6 +6,7 @@ import com.ja90n.huntorbehunted.runnables.StartCountdownRunnable;
 import com.ja90n.huntorbehunted.utils.SetScoreboard;
 import com.ja90n.huntorbehunted.utils.WinCheckUtil;
 import org.bukkit.*;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -61,6 +62,10 @@ public class Arena {
             players1.clear();
             game.ResetRunnerWinCountdownRunnable();
         }
+        for (ArmorStand armorStand : game.getPowerUps().values()){
+            armorStand.remove();
+        }
+        game.getPowerUpSpawnRunnable().cancel();
         sendTitle(" ", " ");
         gameState = GameState.RECRUITING;
         try {

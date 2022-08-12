@@ -33,13 +33,6 @@ public final class HuntOrBeHunted extends JavaPlugin {
 
         pool = new JedisPool(poolCfg, "192.168.178.16", 6379, 500);
 
-        try (Jedis jedis1 = pool.getResource()) {
-            System.out.println("-------------------------------------------------");
-            System.out.println(jedis1.get("spigot:gamestate:" + arena.getName()));
-            System.out.println("spigot:gamestate:" + arena.getName());
-        }
-
-
         //receiveSpigotMessageRunnable = new ReceiveSpigotMessageRunnable(this);
         sendVelocityMessageRunnable = new SendVelocityMessageRunnable(this);
 
